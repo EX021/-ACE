@@ -1,0 +1,42 @@
+{
+    "nom": "cachette",
+    "description": [
+        "Les terminaux informatiques grésillent...",
+        "Un voyant rouge clignote au plafond...",
+        "Soudain tu entends un bruit, ils arrivent !!!"
+    ],
+    "choix": [
+        {
+            "label": "Sous la table",
+            "effets": [
+                {"type": "message", "texte": "D'un geste rapide tu te glisses sous la table."},
+                {"type": "message", "texte": "Ils commencent à parler..."},
+                {"type": "chance", "probabilite": 0.2,
+                    "succes": [
+                        {"type": "message", "texte": "Une alarme retentit... Ils sortent en courant !"},
+                        {"type": "aller_a", "salle": "le couloir"}
+                    ],
+                    "echec": [
+                        {"type": "message", "texte": "L'un d'eux fait tomber un stylo..."},
+                        {"type": "game_over", "texte": "GAME OVER"}
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Dans l'armoire",
+            "effets": [
+                {"type": "message", "texte": "Tu cours vers l'armoire et la fermes."},
+                {"type": "message", "texte": "Ils partent en fermant la porte à clé."},
+                {"type": "aller_a", "salle": "le couloir"}
+            ]
+        },
+        {
+            "label": "Ne pas se cacher",
+            "effets": [
+                {"type": "message", "texte": "Ils t'attrapent."},
+                {"type": "game_over", "texte": "GAME OVER"}
+            ]
+        }
+    ]
+}

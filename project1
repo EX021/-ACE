@@ -1,0 +1,178 @@
+import time
+import random
+import questionary
+import json
+import os
+
+# Le nom du fichier qui va stocker nos données
+FICHIER_SAVE = "sauvegarde.json"
+
+# --- SYSTÈME DE CHARGEMENT ---
+# Par défaut, le joueur n'a ni nom, ni âge, et commence à l'étape 0
+joueur = {"nom": "", "age": "", "etape": 0}
+
+if os.path.exists(FICHIER_SAVE):
+    reprendre = questionary.confirm("Une sauvegarde a été trouvée. Veux-tu reprendre ta partie ?").ask()
+    if reprendre:
+        with open(FICHIER_SAVE, "r") as fichier:
+            joueur = json.load(fichier)
+        print(f"\n--- Content de te revoir, {joueur['nom']} ! ---")
+        time.sleep(2)
+
+# ==========================================
+# ÉTAPE 0 : CRÉATION DU PERSONNAGE
+# ==========================================
+if joueur["etape"] == 0:
+    print("Salut, pour commencer crée ton personnage")
+    joueur["nom"] = questionary.text("Comment s'appelle-t-il ?").ask()
+    joueur["age"] = questionary.text("Quel âge a-t-il ?").ask()
+
+    time.sleep(2)
+    print("-------------------------------------------------")
+    print("          #CRÉATION DU PERSONNAGE#               ")
+    print("-------------------------------------------------")
+
+    # Barre de chargement visuelle
+    barre = ["----", "----------", "--------------------", "-----------------------------", 
+             "--------------------------------------", "----------------------------------------------------"]
+    for etape_barre in barre:
+        time.sleep(0.5) # J'ai réduit un peu le temps pour que ce soit moins long
+        print(etape_barre)
+
+    print("# PERSONNAGE CRÉÉ #")
+    time.sleep(1)
+    print(f"Ton personnage s'appelle {joueur['nom']} et a {joueur['age']} ans.")
+    print(f"{joueur['nom']} peut maintenant partir à l'aventure !")
+    
+    # --- SAUVEGARDE ---
+    # Le personnage est créé, on passe à l'étape 1 et on sauvegarde.
+    joueur["etape"] = 1
+    with open(FICHIER_SAVE, "w") as fichier:
+        json.dump(joueur, fichier)
+    print("[Partie sauvegardée automatiquement]")
+    time.sleep(3)
+
+
+# ==========================================
+# ÉTAPE 1 : LE DÉBUT / LA CACHETTE
+# ==========================================
+if joueur["etape"] == 1:
+    print("-------------------------------------------------")
+    print("            #DÉBUT DU SCÉNARIO#                  ")
+    print("-------------------------------------------------")
+
+    # Transition vide
+    for _ in range(30):
+        print("-------------------------------------------------")
+
+    time.sleep(3)
+    print("Les terminaux informatiques grésillent, affichant des lignes de code d'erreur en boucle.")
+    time.sleep(3)
+    print("Un voyant rouge clignote au plafond, projetant des ombres saccadées sur les murs en métal.")
+    time.sleep(3)
+    print("Soudain tu entends un bruit, ils arrivent !!!")
+    time.sleep(3)
+
+    cachette1 = questionary.select(
+        "Cherche un endroit pour te cacher !",
+        choices=[
+            "Sous la table",
+            "Dans l'armoire",
+            "Ne pas se cacher"
+        ]
+    ).ask()
+
+    if cachette1 == "Sous la table":
+        print("D'un geste rapide tu te glisses sous la table.")
+        time.sleep(1)
+        print("D'ici, tu ne vois que leurs jambes.")
+        time.sleep(2)
+        print("Ils commencent à parler et remarquent quelque chose...")
+
+        chance = random.randint(1, 5) 
+
+        if chance == 2:
+            print("Une alarme retentit... Ils sortent en courant !")
+        else:
+            print("L'un d'eux fait tomber un stylo, il se baisse et....")
+            print("# GAME OVER #")
+            print("#############################################")
+            print("Crédits :")
+            print("Développement : Moi")
+            print("Interface graphique : Il n'y en a pas")
+            print("#############################################")
+            exit()
+
+    elif cachette1 == "Dans l'armoire":
+        print("Tu cours vers l'armoire et la fermes.") 
+        time.sleep(1)
+        print("Depuis ta cachette tu écoutes leur conversation...")
+        time.sleep(1)
+        print("- Où est-il ?!")
+        time.sleep(1)
+        print("- Le patron va nous tuer !!!")
+        time.sleep(1)
+        print("- Allons le retrouver !")
+        time.sleep(1)
+        print("Ils partent en fermant derrière eux la porte à clé.")
+        time.sleep(1)
+
+    elif cachette1 == "Ne pas se cacher":
+        confirm = questionary.confirm("Sûr ?").ask()
+        if confirm:
+            print("Ils t'attrapent et t'emmènent avec eux.")
+            print("# GAME OVER #")
+            exit()
+        else:
+            print("Ok alors choisis ! Vite !!")
+            # Note : on triche un peu ici, il perd quand même par manque de temps
+            time.sleep(2)
+            print("Trop tard, ils t'ont vu !")
+            print("# GAME OVER #")
+            exit()
+
+    # --- SAUVEGARDE ---
+    # Le joueur a survécu à la première scène, on passe à l'étape 2.
+    joueur["etape"] = 2
+    with open(FICHIER_SAVE, "w") as fichier:
+        json.dump(joueur, fichier)
+    print("\n[Point de contrôle atteint. Partie sauvegardée !]")
+    time.sleep(2)
+
+
+# ==========================================
+# ÉTAPE 2 : LA FOUILLE
+# ==========================================
+if joueur["etape"] == 2:
+    print("\nTu sors de ta cachette et commences à chercher un moyen de t'enfuir.")
+    
+    choix2 = questionary.select(
+        "Où vas-tu chercher ?",
+        choices=[
+            "Vers les ordinateurs",
+            "Dans les tiroirs",
+            "Tu enfonces la porte"
+        ]
+    ).ask()
+
+    if choix2 == "Tu enfonces la porte":
+        print("Tu prends de l'élan, cours et te heurtes violemment contre la porte en acier trempé.")
+        time.sleep(2)
+        print("Un gros BOOOOOMM retentit.")
+        print("La porte ne s'ouvre pas...")
+        time.sleep(2)
+        print("Tu entends marcher dans le couloir.")
+        print("Plus le temps de se cacher....!")
+        time.sleep(2)
+        print("La porte s'ouvre et un garde d'au moins 2 mètres te prend par la veste et t'emmène avec lui.")
+        print("# GAME OVER #")
+        exit()
+        
+    elif choix2 == "Dans les tiroirs":
+        print("Tu fouilles dans cet étrange tiroir.")
+        time.sleep(2)
+        print("Au fond de celui-ci se trouve une sorte de carte...")
+        time.sleep(2)
+        print("Sur cette dernière est écrit: # ACCÈS LEVEL -1 #")
+        
+        # Et l'histoire continuera ici...

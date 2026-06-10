@@ -1,0 +1,4 @@
+discord.py
+requests
+selenium
+Pillow>=10.0.0
