@@ -1,1 +1,1 @@
-worker: python3 BrawlBot.py
+worker: python3 Bot.py
