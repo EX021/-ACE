@@ -9,30 +9,6 @@ import os
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 
-# ==========================================
-# 🌐 PETIT SERVEUR POUR GARDER LE BOT SUR LE PLAN GRATUIT
-# ==========================================
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import threading
-
-class SimpleHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        self.wfile.write(b"Bot en ligne !")
-
-def run_web_server():
-    server = HTTPServer(('0.0.0.0', 10000), SimpleHandler)
-    server.serve_forever()
-
-# Lance le serveur web en arrière-plan
-threading.Thread(target=run_web_server, daemon=True).start()
-
-# Configuration des intentions (Intents)
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
 
 bot = commands.Bot(command_prefix="$", intents=intents)
 
